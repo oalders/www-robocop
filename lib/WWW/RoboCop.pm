@@ -3,6 +3,7 @@ use warnings;
 
 package WWW::RoboCop;
 
+use Carp qw( croak );
 use Moose;
 use MooseX::StrictConstructor;
 use MooseX::Types::Moose qw( CodeRef HashRef );
@@ -54,7 +55,7 @@ sub _get {
     my $referring_url = shift;
 
     my $response = $self->ua->get( $url );
-    my $report   = $self->_log_response( $response, $referring_url );
+    my $report = $self->_log_response( $response, $referring_url );
     $self->_add_url_to_history( $url, $report );
 
     my @links = $self->ua->find_all_links;
@@ -74,6 +75,8 @@ sub _get {
 sub crawl {
     my $self = shift;
     my $url  = shift;
+    croak 'URL required' if !$url;
+
     $self->_get( $url );
 }
 
