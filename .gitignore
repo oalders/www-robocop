@@ -1,0 +1,9 @@
+_build/
+/blib/
+.build
+Build
+local
+.perl-version
+*.swp
+.tidyall.d/
+/WWW-RoboCop*
