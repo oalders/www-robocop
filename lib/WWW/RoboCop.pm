@@ -40,6 +40,7 @@ has _history => (
 sub _get {
     my $self = shift;
     my $url  = shift;
+    my $referring_url = shift;
 
     $self->ua->get( $url );
     $self->_add_url_to_history( $url => { status => $self->ua->status } );
@@ -50,7 +51,7 @@ sub _get {
         my $uri = URI->new( $link->url_abs );
         $uri->fragment( undef );    # fragments result in duplicate urls
         next if $self->_has_processed_url( $uri->as_string );
-        if ( $self->follow_link_callback->( $link ) ) {
+        if ( $self->follow_link_callback->( $link, $referring_url ) ) {
             $self->_get( $uri->as_string );
         }
     }
