@@ -4,35 +4,36 @@ use warnings;
 package WWW::RoboCop;
 
 use Carp qw( croak );
-use Moose;
-use MooseX::StrictConstructor;
-use MooseX::Types::Moose qw( CodeRef HashRef );
+use Moo;
+use MooX::HandlesVia;
+use MooX::StrictConstructor;
+use Mozilla::CA;
+use Types::Standard qw( CodeRef HashRef InstanceOf );
 use URI;
+use WWW::Mechanize;
 
 has is_url_whitelisted => (
-    is       => 'ro',
-    isa      => CodeRef,
-    traits   => ['Code'],
-    handles  => { _should_follow_link => 'execute' },
-    required => 1,
+    is          => 'ro',
+    isa         => CodeRef,
+    handles_via => 'Code',
+    handles     => { _should_follow_link => 'execute' },
+    required    => 1,
 );
 
 has report_for_url => (
-    is      => 'ro',
-    isa     => CodeRef,
-    traits  => ['Code'],
-    handles => { _log_response => 'execute' },
-    default => sub {
+    is          => 'ro',
+    isa         => CodeRef,
+    handles_via => 'Code',
+    handles     => { _log_response => 'execute' },
+    default     => sub {
         sub { return { status => $_[0]->code } }
     },
 );
 
 has ua => (
     is      => 'ro',
-    isa     => 'WWW::Mechanize',
+    isa     => InstanceOf['WWW::Mechanize'],
     default => sub {
-        require Mozilla::CA;
-        require WWW::Mechanize;
         WWW::Mechanize->new( autocheck => 0 );
     },
 );
@@ -40,7 +41,7 @@ has ua => (
 has _history => (
     is      => 'ro',
     isa     => HashRef,
-    traits  => ['Hash'],
+    handles_via => 'Hash',
     handles => {
         _add_url_to_history => 'set',
         _has_processed_url  => 'exists',
