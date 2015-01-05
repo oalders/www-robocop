@@ -2,6 +2,7 @@ _build/
 /blib/
 .build
 Build
+cpanfile.snapshot
 local
 .perl-version
 *.swp

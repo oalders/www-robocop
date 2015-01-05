@@ -4,7 +4,7 @@ perl:
   - "5.18"
   - "5.16"
 script:
-  - "prove -lr t"
+  - "prove -lvr t"
 notifications:
   email:
     recipients:
