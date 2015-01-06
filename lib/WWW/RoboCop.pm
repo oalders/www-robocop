@@ -147,30 +147,36 @@ Your sub might look something like this:
 
     use feature qw( state );
 
-    my $whitelister = sub {
+    my $upper_limit = 100;
+    my $whitelister => sub {
         my $link          = shift;
         my $referring_url = shift;
 
-        state $count = 0;
+        state $limit = 0;
 
-        # find 404s on your site by spidering the first outbound link and
-        # stopping there
+        return 0 if $limit > $upper_limit;
+        my $uri = URI->new( $link->url );
 
-        return 1
-            if $link->URI->host
-            && $link->URI->host !~ m{myhost.com}
-            && $referring_url
-            && $referring_url ~= m{myhost.com};
+        # URLs are OK if
+        # 1) absolute URL with matching host
+        # 2) relative URL where referrer matches host (inbound link)
+        # 3) absolute URL where host does not match but referring host does (1st degree outbound link)
 
-        return 0
-            if $link->URI->host
-            && $link->URI->host !~ m{myhost.com};
-
-        # set an upper limit on URLs to crawl
-        ++$count;
-        return 0 if $count > 200;
-        return 1;
-    };
+        if (( $uri->scheme && $uri->host eq $host )
+            || (  !$uri->scheme
+                && $referring_url->host
+                && $referring_url->host eq $host )
+            || (   $uri->scheme
+                && $uri->host ne $host
+                && $referring_url->host
+                && $referring_url->host eq $host )
+            )
+        {
+            ++$limit;
+            return 1;
+        }
+        return 0;
+    },
 
     my $robocop = WWW::RoboCop->new(
         is_url_whitelisted => $whitelister
