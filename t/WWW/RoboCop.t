@@ -14,12 +14,9 @@ EOF
 
 my $app = sub { return [ 200, [ 'Content-Type' => 'text/html' ], [$html] ] };
 
-my $ua = WWW::Mechanize->new( autocheck => 0 );
-
 my $server_agent = Plack::Test::Agent->new(
     app    => $app,
     server => 'HTTP::Server::Simple',
-    ua     => $ua,
 );
 
 ok( $server_agent->get( '/' )->is_success,    'get HTML' );
@@ -33,7 +30,6 @@ my $robocop = WWW::RoboCop->new(
         my $res = shift;
         return { status => $res->code, path => $res->base->path };
     },
-    ua => $ua,
 );
 
 $robocop->crawl( $server_agent->normalize_uri( '/' ) );
