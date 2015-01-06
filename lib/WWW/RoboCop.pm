@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use feature qw( state );
 
 package WWW::RoboCop;
 
@@ -8,7 +9,9 @@ use Moo;
 use MooX::HandlesVia;
 use MooX::StrictConstructor;
 use Mozilla::CA;
+use Type::Params qw( compile );
 use Types::Standard qw( CodeRef HashRef InstanceOf );
+use Types::URI -all;
 use URI;
 use WWW::Mechanize;
 
@@ -65,18 +68,19 @@ sub _get {
         my $uri = URI->new( $link->url_abs );
         $uri->fragment( undef );    # fragments result in duplicate urls
 
-        next if $self->_has_processed_url( $uri->as_string );
+        next if $self->_has_processed_url( $uri );
         next unless $uri->can( 'host' );    # no mailto: links
         next unless $self->_should_follow_link( $link, $referring_url );
 
-        $self->_get( $uri->as_string, $url );
+        $self->_get( $uri, $url );
     }
 }
 
 sub crawl {
     my $self = shift;
-    my $url  = shift;
-    croak 'URL required' if !$url;
+
+    state $check = compile( Uri );
+    my ($url) = $check->(@_);
 
     $self->_get( $url );
 }
@@ -137,7 +141,7 @@ Below are the arguments which you may pass to new() when creating an object.
 This argument is required.  You must provide an anonymous subroutine which will
 return true or false based on some arbitrary criteria which you provide.  The
 two arguments to this anonymous subroutine will be a L<WWW::Mechanize::Link>
-object as well as the referring URL.
+object as well as the referring URL, in the form of a L<URI> object.
 
 Your sub might look something like this:
 
@@ -176,7 +180,8 @@ Your sub might look something like this:
 
 This argument is not required, but is highly recommended. The arguments to this
 anonymous subroutine will be an L<HTTP::Response> object as well as the
-referring URL.  Your sub might look something like this:
+referring URL in the form of a L<URI> object.  Your sub might look something
+like this:
 
     my $reporter = sub {
         my $response      = shift;    # HTTP::Response object

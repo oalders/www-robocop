@@ -44,7 +44,8 @@ CONSTRUCTOR AND STARTUP
     This argument is required. You must provide an anonymous subroutine
     which will return true or false based on some arbitrary criteria which
     you provide. The two arguments to this anonymous subroutine will be a
-    WWW::Mechanize::Link object as well as the referring URL.
+    WWW::Mechanize::Link object as well as the referring URL, in the form of
+    a URI object.
 
     Your sub might look something like this:
 
@@ -82,7 +83,8 @@ CONSTRUCTOR AND STARTUP
    report_for_url
     This argument is not required, but is highly recommended. The arguments
     to this anonymous subroutine will be an HTTP::Response object as well as
-    the referring URL. Your sub might look something like this:
+    the referring URL in the form of a URI object. Your sub might look
+    something like this:
 
         my $reporter = sub {
             my $response      = shift;    # HTTP::Response object
