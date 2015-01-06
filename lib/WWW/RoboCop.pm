@@ -197,7 +197,7 @@ like this:
     };
 
     my $robocop = WWW::RoboCop->new(
-        is_url_whitelisted => ...,
+        is_url_whitelisted => sub { ... },
         report_for_url     => $reporter,
     );
 
@@ -215,14 +215,14 @@ This can give you enough of a speedup to save you from getting distracted
 and going off to read Hacker News while you wait.
 
     my $robocop = WWW::RoboCop->new(
-        is_url_whitelisted => ...,
+        is_url_whitelisted => sub { ... },
         ua => WWW::Mechanize::Cached->new( cache => $CHI ),
     );
 
 If you're not using a Cached agent, be sure to disable autocheck.
 
     my $robocop = WWW::RoboCop->new(
-        is_url_whitelisted => ...,
+        is_url_whitelisted => sub { ... },
         ua => WWW::Mechanize->new( autocheck => 0 ),
     );
 
