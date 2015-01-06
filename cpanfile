@@ -9,6 +9,7 @@ requires "Types::URI" => "0";
 requires "URI" => "0";
 requires "WWW::Mechanize" => "0";
 requires "feature" => "0";
+requires "perl" => "v5.10.0";
 requires "strict" => "0";
 requires "warnings" => "0";
 
@@ -21,11 +22,13 @@ on 'test' => sub {
   requires "Plack::Test::Agent" => "0";
   requires "Test::Fatal" => "0";
   requires "Test::Most" => "0";
+  requires "perl" => "v5.10.0";
 };
 
 on 'configure' => sub {
   requires "ExtUtils::MakeMaker" => "0";
   requires "Module::Build" => "0.28";
+  requires "perl" => "v5.10.0";
 };
 
 on 'develop' => sub {
