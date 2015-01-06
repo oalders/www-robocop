@@ -70,7 +70,7 @@ sub _get {
 
         next if $self->_has_processed_url( $uri );
         next unless $uri->can( 'host' );    # no mailto: links
-        next unless $self->_should_follow_link( $link, $referring_url );
+        next unless $self->_should_follow_link( $link, $url );
 
         $self->_get( $uri, $url );
     }
