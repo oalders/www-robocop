@@ -220,6 +220,13 @@ That would give you a HashRef with the status code for each link visited (200,
 found) and a list of any redirects which were followed in order to get to this
 URL.
 
+The default report_for_url sub will already provide something like the above,
+but you should only treat this as a stub method while you get up and running.
+Since it's only meant to be an example, the format of the default report could
+change at some future date without notice.  You should not rely on or expect it
+to remain consistent in future.  If you are going to rely on this module, you
+should provide your own reporting logic.
+
 =head3 ua( WWW::Mechanize )
 
 You can provide your own UserAgent object to this class.  It should be of the
