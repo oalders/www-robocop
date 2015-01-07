@@ -28,35 +28,18 @@ my $robocop = WWW::RoboCop->new(
         state $limit = 0;
 
         return 0 if $limit > $upper_limit;
-        my $uri = URI->new( $link->url );
+        my $uri = URI->new( $link->url_abs );
 
-# URLs are OK if
-# 1) absolute URL with matching host
-# 2) relative URL where referrer matches host (inbound link)
-# 3) absolute URL where host does not match but referring host does (1st degree outbound link)
+        # If the link URI does not match the host but the referring_url matches
+        # the host, then this is a 1st degree outbound link.  We'll fetch the
+        # page in order to log the status code etc, but we won't index any of
+        # the links on it.
 
-        if (( $uri->scheme && $uri->host eq $host )
-            || (  !$uri->scheme
-                && $referring_url->host
-                && $referring_url->host eq $host )
-            || (   $uri->scheme
-                && $uri->host ne $host
-                && $referring_url->host
-                && $referring_url->host eq $host )
-            )
-        {
+        if ( $uri->host eq $host || $referring_url->host eq $host ) {
             ++$limit;
             return 1;
         }
         return 0;
-    },
-    report_for_url => sub {
-        my $response      = shift;
-        my $referring_url = shift;
-        return {
-            status   => $response->code,
-            referrer => $referring_url ? $referring_url->as_string : undef,
-        };
     },
     ua => WWW::Mechanize::Cached->new( cache => $cache ),
 );
