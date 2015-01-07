@@ -29,23 +29,39 @@ has report_for_url => (
     handles_via => 'Code',
     handles     => { _log_response => 'execute' },
     default     => sub {
-        sub { return { status => $_[0]->code } }
+        sub {
+            my $response      = shift;    # HTTP::Response object
+            my $referring_url = shift;    # URI object
+            return {
+                redirects => [
+                    map {
+                        +{  status => $_->code,
+                            uri    => $_->base->as_string
+                            }
+                    } $response->redirects
+                ],
+                referrer => $referring_url
+                ? $referring_url->as_string
+                : undef,
+                status => $response->code,
+            };
+        };
     },
 );
 
 has ua => (
     is      => 'ro',
-    isa     => InstanceOf['WWW::Mechanize'],
+    isa     => InstanceOf ['WWW::Mechanize'],
     default => sub {
         WWW::Mechanize->new( autocheck => 0 );
     },
 );
 
 has _history => (
-    is      => 'ro',
-    isa     => HashRef,
+    is          => 'ro',
+    isa         => HashRef,
     handles_via => 'Hash',
-    handles => {
+    handles     => {
         _add_url_to_history => 'set',
         _has_processed_url  => 'exists',
     },
@@ -80,7 +96,7 @@ sub crawl {
     my $self = shift;
 
     state $check = compile( Uri );
-    my ($url) = $check->(@_);
+    my ( $url ) = $check->( @_ );
 
     $self->_get( $url );
 }
@@ -147,39 +163,31 @@ Your sub might look something like this:
 
     use feature qw( state );
 
+    use URI;
+    use WWW::RoboCop;
+
     my $upper_limit = 100;
-    my $whitelister => sub {
-        my $link          = shift;
-        my $referring_url = shift;
-
-        state $limit = 0;
-
-        return 0 if $limit > $upper_limit;
-        my $uri = URI->new( $link->url );
-
-        # URLs are OK if
-        # 1) absolute URL with matching host
-        # 2) relative URL where referrer matches host (inbound link)
-        # 3) absolute URL where host does not match but referring host does (1st degree outbound link)
-
-        if (( $uri->scheme && $uri->host eq $host )
-            || (  !$uri->scheme
-                && $referring_url->host
-                && $referring_url->host eq $host )
-            || (   $uri->scheme
-                && $uri->host ne $host
-                && $referring_url->host
-                && $referring_url->host eq $host )
-            )
-        {
-            ++$limit;
-            return 1;
-        }
-        return 0;
-    },
+    my $host = 'some.host.com';
 
     my $robocop = WWW::RoboCop->new(
-        is_url_whitelisted => $whitelister
+        is_url_whitelisted => sub {
+            my $link          = shift;
+            my $referring_url = shift;
+
+            state $limit = 0;
+
+            return 0 if $limit > $upper_limit;
+            my $uri = URI->new( $link->url_abs );
+
+            # if the referring_url matches the host then this is a 1st degree
+            # outbound web link
+
+            if ( $uri->host eq $host || $referring_url->host eq $host ) {
+                ++$limit;
+                return 1;
+            }
+            return 0;
+        }
     );
 
 =head3 report_for_url
@@ -191,7 +199,7 @@ like this:
 
     my $reporter = sub {
         my $response      = shift;    # HTTP::Response object
-        my $referring_url = shift;    # URL as plain old string
+        my $referring_url = shift;    # URI object
         return {
             redirects => [
                 map { +{ status => $_->code, uri => $_->base->as_string } }
