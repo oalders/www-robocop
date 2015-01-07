@@ -19,8 +19,8 @@ SYNOPSIS
         my $history = $robocop->get_report;
 
         # $history = {
-        #    'http://myhost.com/one' => { status => 200 },
-        #    'http://myhost.com/two' => { status => 404 },
+        #    'http://myhost.com/one' => { status => 200, ... },
+        #    'http://myhost.com/two' => { status => 404, ... },
         #}
 
 DESCRIPTION
