@@ -140,8 +140,8 @@ so that you can collect all of the information which you require for each URL.
     my $history = $robocop->get_report;
 
     # $history = {
-    #    'http://myhost.com/one' => { status => 200 },
-    #    'http://myhost.com/two' => { status => 404 },
+    #    'http://myhost.com/one' => { status => 200, ... },
+    #    'http://myhost.com/two' => { status => 404, ... },
     #}
 
 =head1 CONSTRUCTOR AND STARTUP
