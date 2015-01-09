@@ -41,10 +41,10 @@ my $robocop = WWW::RoboCop->new(
         return 0 if $limit > $upper_limit;
         my $uri = URI->new( $link->url_abs );
 
-        # If the link URI does not match the host but the referring_url matches
-        # the host, then this is a 1st degree outbound link.  We'll fetch the
-        # page in order to log the status code etc, but we won't index any of
-        # the links on it.
+       # If the link URI does not match the host but the referring_url matches
+       # the host, then this is a 1st degree outbound link.  We'll fetch the
+       # page in order to log the status code etc, but we won't index any of
+       # the links on it.
 
         if ( $uri->host eq $host || $referring_url->host eq $host ) {
             ++$limit;

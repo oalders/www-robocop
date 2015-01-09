@@ -21,7 +21,7 @@ my $server_agent = Plack::Test::Agent->new(
     server => 'HTTP::Server::Simple',
 );
 
-ok( $server_agent->get( '/' )->is_success,    'get HTML' );
+ok( $server_agent->get( '/' )->is_success, 'get HTML' );
 
 my $robocop = WWW::RoboCop->new(
     is_url_whitelisted => sub {
