@@ -16,7 +16,7 @@ use warnings;
 use feature qw( say state );
 
 use CHI;
-use Data::Printer;
+use Data::Printer filters => { -external => ['URI'], };
 use Path::Tiny qw( path );
 use WWW::RoboCop;
 use WWW::Mechanize::Cached;
