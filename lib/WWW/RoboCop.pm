@@ -33,17 +33,19 @@ has report_for_url => (
             my $response      = shift;    # HTTP::Response object
             my $referring_url = shift;    # URI object
             return {
-                redirects => [
-                    map {
-                        +{  status => $_->code,
-                            uri    => $_->base->as_string
+                $response->redirects
+                ? ( redirects => [
+                        map {
+                            {   status => $_->code,
+                                uri    => $_->request->uri,
                             }
-                    } $response->redirects
-                ],
-                referrer => $referring_url
-                ? $referring_url->as_string
-                : undef,
-                status => $response->code,
+                        } $response->redirects
+                    ],
+                    target_url => $response->request->uri,
+                    )
+                : (),
+                referrer => $referring_url,
+                status   => $response->code,
             };
         };
     },
@@ -107,7 +109,7 @@ sub crawl {
 
 sub get_report {
     my $self = shift;
-    return %{$self->_history};
+    return %{ $self->_history };
 }
 
 1;
