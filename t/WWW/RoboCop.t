@@ -10,6 +10,8 @@ use DDP;
 my $html = <<EOF;
 <a href="/foo">foo</a>
 <a href="/bar">bar</a>
+<a href="#">
+<a href="">
 EOF
 
 my $app = sub { return [ 200, [ 'Content-Type' => 'text/html' ], [$html] ] };

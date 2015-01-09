@@ -81,6 +81,10 @@ sub _get {
     my @links = $self->ua->find_all_links;
 
     foreach my $link ( @links ) {
+
+        # this just points back at the same url
+        next if substr( $link->url, 0, 1 ) eq '#';
+
         my $uri = URI->new( $link->url_abs );
         $uri->fragment( undef );    # fragments result in duplicate urls
 
