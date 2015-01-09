@@ -35,10 +35,10 @@ my $robocop = WWW::RoboCop->new(
 );
 
 $robocop->crawl( $server_agent->normalize_uri( '/' ) );
-my $report = $robocop->get_report;
-ok( $report, 'get_report' );
+my %report = $robocop->get_report;
+ok( %report, 'get_report' );
 
-my @results = sort { $a->{path} cmp $b->{path} } values %{$report};
+my @results = sort { $a->{path} cmp $b->{path} } values %report;
 is_deeply(
     \@results,
     [   {   path   => "/",

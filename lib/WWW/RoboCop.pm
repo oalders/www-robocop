@@ -107,7 +107,7 @@ sub crawl {
 
 sub get_report {
     my $self = shift;
-    return $self->_history;
+    return %{$self->_history};
 }
 
 1;
@@ -143,13 +143,13 @@ so that you can collect all of the information which you require for each URL.
 
     $robocop->crawl( 'http://host.myhost.com/start' );
 
-    my $history = $robocop->get_report;
+    my %history = $robocop->get_report;
 
-    # $history = {
+    # %history = (
     #    'http://myhost.com/one' => { status => 200, ... },
     #    'http://myhost.com/two' => { status => 404, ... },
     #    ...
-    #}
+    # )
 
 =head1 CONSTRUCTOR AND STARTUP
 
@@ -271,19 +271,19 @@ halt once has exhausted all of the whitelisted URLs it can find.
 =head2 get_report
 
 This method returns a HashRef of crawling results, keyed on the URLs visited.
-By default, it returns a very simple HashRef, containing only the status code
+By default, it returns a very simple Hash, containing only the status code
 of the visited URL.  You are encouraged to provide your own callback so that
 you can get a detailed report returned to you.  You can do this by providing a
 C<report_for_url> callback when instantiating the object.
 
 The default report looks something like this:
 
-    # $history = {
+    # %history = (
     #    'http://myhost.com/one' => { status => 200, ... },
     #    'http://myhost.com/two' => { status => 404, ... },
-    #}
+    # )
 
-See the examples/crawl-host.pl, which is included with this distribution, to
-see a dump of the default report.
+See examples/crawl-host.pl, which is included with this distribution, to see a
+dump of the default report.
 
 =cut

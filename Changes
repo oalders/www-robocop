@@ -2,6 +2,7 @@ Revision history for WWW-RoboCop
 
 {{$NEXT}}
     - Don't try to follow href="#"
+    - get_report() now returns a Hash rather than HashRef
 
 0.000001  2015-01-07 17:44:31-05:00 America/Toronto
     - Initial release.

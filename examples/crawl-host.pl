@@ -1,5 +1,16 @@
 #!/usr/bin/env perl
 
+=head1 SYNOPSIS
+
+    perl examples/crawl-host.pl www.somehost.com
+
+=head1 DESCRIPTION
+
+This simple script shows you a dump of the default report.  You're encouraged
+to provide your own reporting callback in order to customize your report.
+
+=cut
+
 use strict;
 use warnings;
 use feature qw( say state );
@@ -16,7 +27,7 @@ my $cache = CHI->new(
 );
 
 my $host        = shift @ARGV;
-my $upper_limit = 100;
+my $upper_limit = 10;
 
 die 'usage: perl examples/crawl-host.pl www.somehost.com' unless $host;
 
@@ -46,6 +57,6 @@ my $robocop = WWW::RoboCop->new(
 
 $robocop->crawl( "http://$host" );
 
-my $report = $robocop->get_report;
+my %report = $robocop->get_report;
 
-p $report;
+p( %report );
