@@ -122,19 +122,21 @@ __END__
 
 BETA BETA BETA!
 
-WWW::RoboCop is a dead simple, somewhat opinionated robot.  Given a starting
+C<WWW::RoboCop> is a dead simple, somewhat opinionated robot.  Given a starting
 page, this module will crawl only URLs which have been whitelisted by the
-is_url_whitelisted() callback.  It then creates a report of all visited pages,
+C<is_url_whitelisted> callback.  It then creates a report of all visited pages,
 keyed on URL.  You are encouraged to provide your own report creation callback
 so that you can collect all of the information which you require for each URL.
 
 =head1 SYNOPSIS
 
+    use feature qw( state );
+
     use WWW::RoboCop;
 
-    my $count = 0;
     my $robocop = WWW::RoboCop->new(
         is_url_whitelisted => sub {
+            state $count = 0;
             return $count++ < 5; # just crawl 5 URLs
         },
     );
@@ -146,15 +148,16 @@ so that you can collect all of the information which you require for each URL.
     # $history = {
     #    'http://myhost.com/one' => { status => 200, ... },
     #    'http://myhost.com/two' => { status => 404, ... },
+    #    ...
     #}
 
 =head1 CONSTRUCTOR AND STARTUP
 
 =head2 new()
 
-Creates and returns a new WWW::RoboCop object.
+Creates and returns a new C<WWW::RoboCop> object.
 
-Below are the arguments which you may pass to new() when creating an object.
+Below are the arguments which you may pass to C<new> when creating an object.
 
 =head3 is_url_whitelisted
 
@@ -170,13 +173,13 @@ Your sub might look something like this:
     use URI;
     use WWW::RoboCop;
 
-    my $upper_limit = 100;
-    my $host = 'some.host.com';
-
     my $robocop = WWW::RoboCop->new(
         is_url_whitelisted => sub {
             my $link          = shift;
             my $referring_url = shift;
+
+            my $upper_limit = 100;
+            my $host = 'some.host.com';
 
             state $limit = 0;
 
@@ -224,12 +227,12 @@ That would give you a HashRef with the status code for each link visited (200,
 found) and a list of any redirects which were followed in order to get to this
 URL.
 
-The default report_for_url sub will already provide something like the above,
-but you should only treat this as a stub method while you get up and running.
-Since it's only meant to be an example, the format of the default report could
-change at some future date without notice.  You should not rely on or expect it
-to remain consistent in future.  If you are going to rely on this module, you
-should provide your own reporting logic.
+The default C<report_for_url> sub will already provide something like the
+above, but you should only treat this as a stub method while you get up and
+running.  Since it's only meant to be an example, the format of the default
+report could change at some future date without notice.  You should not rely on
+or expect it to remain consistent in future.  If you are going to rely on this
+module, you should provide your own reporting logic.
 
 =head3 ua( WWW::Mechanize )
 
@@ -239,9 +242,18 @@ while under development, consider providing a L<WWW::Mechanize::Cached> object.
 This can give you enough of a speedup to save you from getting distracted
 and going off to read Hacker News while you wait.
 
+    use CHI;
+    use WWW::Mechanize::Cached;
+    use WWW::RoboCop;
+
+    my $cache = CHI->new(
+        driver => 'File',
+        root_dir => /tmp/cache-example',
+    );
+
     my $robocop = WWW::RoboCop->new(
         is_url_whitelisted => sub { ... },
-        ua => WWW::Mechanize::Cached->new( cache => $CHI ),
+        ua => WWW::Mechanize::Cached->new( cache => $cache ),
     );
 
 If you're not using a Cached agent, be sure to disable autocheck.
@@ -253,7 +265,7 @@ If you're not using a Cached agent, be sure to disable autocheck.
 
 =head2 crawl( $url )
 
-This method sets the WWW::RoboCop in motion.  The robot will only come to a
+This method sets the C<WWW::RoboCop> in motion.  The robot will only come to a
 halt once has exhausted all of the whitelisted URLs it can find.
 
 =head2 get_report
@@ -262,16 +274,16 @@ This method returns a HashRef of crawling results, keyed on the URLs visited.
 By default, it returns a very simple HashRef, containing only the status code
 of the visited URL.  You are encouraged to provide your own callback so that
 you can get a detailed report returned to you.  You can do this by providing a
-report_for_url callback when instantiating the object.
+C<report_for_url> callback when instantiating the object.
 
 The default report looks something like this:
 
     # $history = {
-    #    'http://myhost.com/one' => { status => 200 },
-    #    'http://myhost.com/two' => { status => 404 },
+    #    'http://myhost.com/one' => { status => 200, ... },
+    #    'http://myhost.com/two' => { status => 404, ... },
     #}
 
-So, you can see that it's worthwhile to whip up a little something special for
-yourself.
+See the examples/crawl-host.pl, which is included with this distribution, to
+see a dump of the default report.
 
 =cut
