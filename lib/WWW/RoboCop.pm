@@ -272,7 +272,7 @@ halt once has exhausted all of the whitelisted URLs it can find.
 
 =head2 get_report
 
-This method returns a HashRef of crawling results, keyed on the URLs visited.
+This method returns a Hash of crawling results, keyed on the URLs visited.
 By default, it returns a very simple Hash, containing only the status code
 of the visited URL.  You are encouraged to provide your own callback so that
 you can get a detailed report returned to you.  You can do this by providing a
@@ -285,7 +285,7 @@ The default report looks something like this:
     #    'http://myhost.com/two' => { status => 404, ... },
     # )
 
-See examples/crawl-host.pl, which is included with this distribution, to see a
+See examples/crawl-host.pl, which is included with this distribution, to get a
 dump of the default report.
 
 =cut
