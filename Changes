@@ -1,6 +1,8 @@
 Revision history for WWW-RoboCop
 
 {{$NEXT}}
+
+0.000003  2015-04-16 23:46:27+02:00 Europe/Berlin
     - Return URI objects rather than strings in default report
     - Default report only has a redirects key if redirects were followed
     - Add target_url to default report when redirects have been followed
