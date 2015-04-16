@@ -3,6 +3,7 @@ requires "Moo" => "0";
 requires "MooX::HandlesVia" => "0";
 requires "MooX::StrictConstructor" => "0";
 requires "Mozilla::CA" => "0";
+requires "Plack::Handler::HTTP::Server::Simple", "0.16";
 requires "Type::Params" => "0";
 requires "Types::Standard" => "0";
 requires "Types::URI" => "0";
