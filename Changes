@@ -1,6 +1,7 @@
 Revision history for WWW-RoboCop
 
 {{$NEXT}}
+    - Adds test dependency
 
 0.000003  2015-04-16 23:46:27+02:00 Europe/Berlin
     - Return URI objects rather than strings in default report
