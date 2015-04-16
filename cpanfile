@@ -19,6 +19,7 @@ on 'build' => sub {
 
 on 'test' => sub {
   requires "DDP" => "0";
+  requires "Plack::Handler::HTTP::Server::Simple" => "0.016";
   requires "Plack::Test::Agent" => "0";
   requires "Test::Fatal" => "0";
   requires "Test::Most" => "0";

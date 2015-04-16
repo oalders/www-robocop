@@ -3,6 +3,7 @@ use Test::Most;
 
 use WWW::Mechanize;
 use WWW::RoboCop;
+use Plack::Handler::HTTP::Server::Simple 0.016;
 use Plack::Test::Agent;
 
 use DDP;
