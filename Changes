@@ -1,6 +1,9 @@
 Revision history for WWW-RoboCop
 
 {{$NEXT}}
+    - Replace 'whitelist' term with 'allowed' (GH#1) (Andy Jack)
+      is_url_whitelisted has now been superceded by is_url_allowed. No major
+      version bump as this is technically in still in beta.
 
 0.000004  2015-04-17 00:18:09+02:00 Europe/Berlin
     - Adds test dependency
