@@ -32,7 +32,7 @@ my $upper_limit = 10;
 die 'usage: perl examples/crawl-host.pl www.somehost.com' unless $host;
 
 my $robocop = WWW::RoboCop->new(
-    is_url_whitelisted => sub {
+    is_url_allowed => sub {
         my $link          = shift;
         my $referring_url = shift;
 

@@ -15,7 +15,7 @@ use Types::URI -all;
 use URI;
 use WWW::Mechanize;
 
-has is_url_whitelisted => (
+has is_url_allowed => (
     is          => 'ro',
     isa         => CodeRef,
     handles_via => 'Code',
@@ -125,8 +125,8 @@ __END__
 BETA BETA BETA!
 
 C<WWW::RoboCop> is a dead simple, somewhat opinionated robot.  Given a starting
-page, this module will crawl only URLs which have been whitelisted by the
-C<is_url_whitelisted> callback.  It then creates a report of all visited pages,
+page, this module will crawl only URLs which have been allowed by the
+C<is_url_allowed> callback.  It then creates a report of all visited pages,
 keyed on URL.  You are encouraged to provide your own report creation callback
 so that you can collect all of the information which you require for each URL.
 
@@ -137,7 +137,7 @@ so that you can collect all of the information which you require for each URL.
     use WWW::RoboCop;
 
     my $robocop = WWW::RoboCop->new(
-        is_url_whitelisted => sub {
+        is_url_allowed => sub {
             state $count = 0;
             return $count++ < 5; # just crawl 5 URLs
         },
@@ -161,7 +161,7 @@ Creates and returns a new C<WWW::RoboCop> object.
 
 Below are the arguments which you may pass to C<new> when creating an object.
 
-=head3 is_url_whitelisted
+=head3 is_url_allowed
 
 This argument is required.  You must provide an anonymous subroutine which will
 return true or false based on some arbitrary criteria which you provide.  The
@@ -176,7 +176,7 @@ Your sub might look something like this:
     use WWW::RoboCop;
 
     my $robocop = WWW::RoboCop->new(
-        is_url_whitelisted => sub {
+        is_url_allowed => sub {
             my $link          = shift;
             my $referring_url = shift;
 
@@ -220,7 +220,7 @@ like this:
     };
 
     my $robocop = WWW::RoboCop->new(
-        is_url_whitelisted => sub { ... },
+        is_url_allowed => sub { ... },
         report_for_url     => $reporter,
     );
 
@@ -254,21 +254,21 @@ and going off to read Hacker News while you wait.
     );
 
     my $robocop = WWW::RoboCop->new(
-        is_url_whitelisted => sub { ... },
+        is_url_allowed => sub { ... },
         ua => WWW::Mechanize::Cached->new( cache => $cache ),
     );
 
 If you're not using a Cached agent, be sure to disable autocheck.
 
     my $robocop = WWW::RoboCop->new(
-        is_url_whitelisted => sub { ... },
+        is_url_allowed => sub { ... },
         ua => WWW::Mechanize->new( autocheck => 0 ),
     );
 
 =head2 crawl( $url )
 
 This method sets the C<WWW::RoboCop> in motion.  The robot will only come to a
-halt once has exhausted all of the whitelisted URLs it can find.
+halt once has exhausted all of the allowed URLs it can find.
 
 =head2 get_report
 
