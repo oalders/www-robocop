@@ -25,7 +25,7 @@ my $server_agent = Plack::Test::Agent->new(
 ok( $server_agent->get( '/' )->is_success, 'get HTML' );
 
 my $robocop = WWW::RoboCop->new(
-    is_url_whitelisted => sub {
+    is_url_allowed => sub {
         my $link = shift;
         return $link->URI->path ne '/bar';
     },
