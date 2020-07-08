@@ -22,7 +22,7 @@ my $server_agent = Plack::Test::Agent->new(
     server => 'HTTP::Server::Simple',
 );
 
-ok( $server_agent->get( '/' )->is_success, 'get HTML' );
+ok( $server_agent->get('/')->is_success, 'get HTML' );
 
 my $robocop = WWW::RoboCop->new(
     is_url_allowed => sub {
@@ -35,17 +35,20 @@ my $robocop = WWW::RoboCop->new(
     },
 );
 
-$robocop->crawl( $server_agent->normalize_uri( '/' ) );
+$robocop->crawl( $server_agent->normalize_uri('/') );
 my %report = $robocop->get_report;
 ok( %report, 'get_report' );
 
 my @results = sort { $a->{path} cmp $b->{path} } values %report;
 is_deeply(
     \@results,
-    [   {   path   => "/",
+    [
+        {
+            path   => "/",
             status => 200,
         },
-        {   path   => "/foo",
+        {
+            path   => "/foo",
             status => 200,
         },
     ],
