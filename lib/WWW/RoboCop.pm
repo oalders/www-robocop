@@ -3,7 +3,7 @@ use warnings;
 use feature qw( state );
 
 package WWW::RoboCop;
-
+our $VERSION = '0.000101';
 use Carp qw( croak );
 use Moo;
 use MooX::HandlesVia;
