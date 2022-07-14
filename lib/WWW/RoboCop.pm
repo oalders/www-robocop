@@ -9,7 +9,7 @@ use Moo;
 use MooX::HandlesVia;
 use MooX::StrictConstructor;
 use Mozilla::CA;
-use Type::Params qw( compile );
+use Type::Params    qw( compile );
 use Types::Standard qw( CodeRef HashRef InstanceOf );
 use Types::URI -all;
 use URI;
