@@ -9,16 +9,17 @@ on:
     branches:
       - "*"
   schedule:
-    - cron: "15 4 * * 0" # Every Sunday morning
+    - cron: "15 4 * * 0"  # Every Sunday morning
+  workflow_dispatch:
 
 jobs:
   build-job:
     name: Build distribution
     runs-on: ubuntu-latest
     container:
-      image: perldocker/perl-tester:5.32
+      image: perldocker/perl-tester:5.36
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Run Tests
         env:
           AUTHOR_TESTING: 1
@@ -26,19 +27,18 @@ jobs:
           EXTENDED_TESTING: 1
           RELEASE_TESTING: 1
         run: auto-build-and-test-dist
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v3
         with:
           name: build_dir
           path: build_dir
-        if: ${{ github.actor != 'nektos/act' }}
   coverage-job:
     needs: build-job
     runs-on: ubuntu-latest
     container:
-      image: perldocker/perl-tester:5.32
+      image: perldocker/perl-tester:5.36
     steps:
-      - uses: actions/checkout@v2 # codecov wants to be inside a Git repository
-      - uses: actions/download-artifact@master
+      - uses: actions/checkout@v3 # codecov wants to be inside a Git repository
+      - uses: actions/download-artifact@v3
         with:
           name: build_dir
           path: .
@@ -65,6 +65,8 @@ jobs:
           - "5.28"
           - "5.30"
           - "5.32"
+          - "5.34"
+          - "5.36"
         exclude:
           - os: windows-latest
             perl-version: "5.10"
@@ -72,6 +74,10 @@ jobs:
             perl-version: "5.12"
           - os: windows-latest
             perl-version: "5.32"
+          - os: windows-latest
+            perl-version: "5.34"
+          - os: windows-latest
+            perl-version: "5.36"
     name: Perl ${{ matrix.perl-version }} on ${{ matrix.os }}
     steps:
       - name: Set Up Perl
@@ -88,7 +94,7 @@ jobs:
         with:
           cpanfile: "cpanfile"
           args: "--with-suggests --with-recommends --with-test"
-      - run: prove -l t xt
+      - run: prove -lr t xt
         env:
           AUTHOR_TESTING: 1
           RELEASE_TESTING: 1
