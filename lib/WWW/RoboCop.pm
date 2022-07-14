@@ -124,9 +124,7 @@ __END__
 
 =head1 DESCRIPTION
 
-BETA BETA BETA!
-
-C<WWW::RoboCop> is a dead simple, somewhat opinionated robot.  Given a starting
+C<WWW::RoboCop> is a simple, somewhat opinionated robot.  Given a starting
 page, this module will crawl only URLs which have been allowed by the
 C<is_url_allowed> callback.  It then creates a report of all visited pages,
 keyed on URL.  You are encouraged to provide your own report creation callback
@@ -136,7 +134,7 @@ so that you can collect all of the information which you require for each URL.
 
     use feature qw( state );
 
-    use WWW::RoboCop;
+    use WWW::RoboCop ();
 
     my $robocop = WWW::RoboCop->new(
         is_url_allowed => sub {
@@ -145,7 +143,7 @@ so that you can collect all of the information which you require for each URL.
         },
     );
 
-    $robocop->crawl( 'http://host.myhost.com/start' );
+    $robocop->crawl( 'https://example.com' );
 
     my %history = $robocop->get_report;
 
