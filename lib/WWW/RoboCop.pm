@@ -155,6 +155,9 @@ so that you can collect all of the information which you require for each URL.
     #    ...
     # )
 
+See C<examples/crawl-host.pl>, which is included with this distribution, to get a
+quick start.
+
 =head1 CONSTRUCTOR AND STARTUP
 
 =head2 new()
@@ -287,7 +290,7 @@ The default report looks something like this:
     #    'http://myhost.com/two' => { status => 404, ... },
     # )
 
-See examples/crawl-host.pl, which is included with this distribution, to get a
-dump of the default report.
+See C<examples/crawl-host.pl>, which is included with this distribution, to get
+a dump of the default report.
 
 =cut
