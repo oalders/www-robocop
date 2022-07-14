@@ -175,8 +175,8 @@ Your sub might look something like this:
 
     use feature qw( state );
 
-    use URI;
-    use WWW::RoboCop;
+    use URI ();
+    use WWW::RoboCop ();
 
     my $robocop = WWW::RoboCop->new(
         is_url_allowed => sub {
@@ -247,9 +247,9 @@ while under development, consider providing a L<WWW::Mechanize::Cached> object.
 This can give you enough of a speedup to save you from getting distracted
 and going off to read Hacker News while you wait.
 
-    use CHI;
-    use WWW::Mechanize::Cached;
-    use WWW::RoboCop;
+    use CHI ();
+    use WWW::Mechanize::Cached ();
+    use WWW::RoboCop ();
 
     my $cache = CHI->new(
         driver => 'File',
