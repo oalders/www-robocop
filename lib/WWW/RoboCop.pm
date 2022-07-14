@@ -4,16 +4,16 @@ use feature qw( state );
 
 package WWW::RoboCop;
 our $VERSION = '0.000101';
-use Carp qw( croak );
+
 use Moo;
+
 use MooX::HandlesVia;
 use MooX::StrictConstructor;
-use Mozilla::CA;
 use Type::Params    qw( compile );
 use Types::Standard qw( CodeRef HashRef InstanceOf );
-use Types::URI -all;
-use URI;
-use WWW::Mechanize;
+use Types::URI      qw( Uri );
+use URI             ();
+use WWW::Mechanize  ();
 
 has is_url_allowed => (
     is          => 'ro',
