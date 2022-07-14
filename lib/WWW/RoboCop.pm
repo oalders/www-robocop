@@ -4,16 +4,16 @@ use feature qw( state );
 
 package WWW::RoboCop;
 our $VERSION = '0.000101';
-use Carp qw( croak );
+
 use Moo;
+
 use MooX::HandlesVia;
 use MooX::StrictConstructor;
-use Mozilla::CA;
 use Type::Params    qw( compile );
 use Types::Standard qw( CodeRef HashRef InstanceOf );
-use Types::URI -all;
-use URI;
-use WWW::Mechanize;
+use Types::URI      qw( Uri );
+use URI             ();
+use WWW::Mechanize  ();
 
 has is_url_allowed => (
     is          => 'ro',
@@ -124,9 +124,7 @@ __END__
 
 =head1 DESCRIPTION
 
-BETA BETA BETA!
-
-C<WWW::RoboCop> is a dead simple, somewhat opinionated robot.  Given a starting
+C<WWW::RoboCop> is a simple, somewhat opinionated robot.  Given a starting
 page, this module will crawl only URLs which have been allowed by the
 C<is_url_allowed> callback.  It then creates a report of all visited pages,
 keyed on URL.  You are encouraged to provide your own report creation callback
@@ -136,7 +134,7 @@ so that you can collect all of the information which you require for each URL.
 
     use feature qw( state );
 
-    use WWW::RoboCop;
+    use WWW::RoboCop ();
 
     my $robocop = WWW::RoboCop->new(
         is_url_allowed => sub {
@@ -145,7 +143,7 @@ so that you can collect all of the information which you require for each URL.
         },
     );
 
-    $robocop->crawl( 'http://host.myhost.com/start' );
+    $robocop->crawl( 'https://example.com' );
 
     my %history = $robocop->get_report;
 
@@ -154,6 +152,9 @@ so that you can collect all of the information which you require for each URL.
     #    'http://myhost.com/two' => { status => 404, ... },
     #    ...
     # )
+
+See C<examples/crawl-host.pl>, which is included with this distribution, to get a
+quick start.
 
 =head1 CONSTRUCTOR AND STARTUP
 
@@ -174,8 +175,8 @@ Your sub might look something like this:
 
     use feature qw( state );
 
-    use URI;
-    use WWW::RoboCop;
+    use URI ();
+    use WWW::RoboCop ();
 
     my $robocop = WWW::RoboCop->new(
         is_url_allowed => sub {
@@ -246,9 +247,9 @@ while under development, consider providing a L<WWW::Mechanize::Cached> object.
 This can give you enough of a speedup to save you from getting distracted
 and going off to read Hacker News while you wait.
 
-    use CHI;
-    use WWW::Mechanize::Cached;
-    use WWW::RoboCop;
+    use CHI ();
+    use WWW::Mechanize::Cached ();
+    use WWW::RoboCop ();
 
     my $cache = CHI->new(
         driver => 'File',
@@ -287,7 +288,7 @@ The default report looks something like this:
     #    'http://myhost.com/two' => { status => 404, ... },
     # )
 
-See examples/crawl-host.pl, which is included with this distribution, to get a
-dump of the default report.
+See C<examples/crawl-host.pl>, which is included with this distribution, to get
+a dump of the default report.
 
 =cut
