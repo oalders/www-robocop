@@ -1,6 +1,6 @@
 Revision history for WWW-RoboCop
 
-{{$NEXT}}
+0.000102  2022-12-02 18:25:14Z
     - Use File::XDG for cache dir in example script (GH#4) (Olaf Alders)
 
 0.000101  2022-07-14 16:16:48Z
