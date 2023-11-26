@@ -36,15 +36,11 @@ has report_for_url => (
                 $response->redirects
                 ? (
                     redirects => [
-                        map {
-                            {
-                                status => $_->code,
-                                uri    => $_->request->uri,
-                            }
-                        } $response->redirects
+                        map { { status => $_->code, uri => $_->request->uri, } }
+                          $response->redirects
                     ],
                     target_url => $response->request->uri,
-                    )
+                  )
                 : (),
                 referrer => $referring_url,
                 status   => $response->code,
@@ -83,13 +79,12 @@ sub _get {
     $self->_add_url_to_history( $fetched_url, $report );
 
     my @links =
-        map { my $u = URI->new( $_->url_abs ); $u->fragment(undef); [ $_, $u ] }
-        grep { $_->url !~ /\A#/ } # no named anchors
-        map { @{ $self->ua->$_() } }
-        qw( links images );
+      map { my $u = URI->new( $_->url_abs ); $u->fragment(undef); [ $_, $u ] }
+      grep { $_->url !~ /\A#/ }                           # no named anchors
+      map { @{ $self->ua->$_() } } qw( links images );
 
     foreach my $tuple (@links) {
-        my( $mech_link, $uri ) = @$tuple;
+        my ( $mech_link, $uri ) = @$tuple;
         next unless $self->_should_follow_link( $mech_link, $fetched_url );
         next if $self->_has_processed_url($uri);
         next unless $uri->can('host');    # no mailto: links
