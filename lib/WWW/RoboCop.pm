@@ -3,7 +3,7 @@ use warnings;
 use feature qw( state );
 
 package WWW::RoboCop;
-our $VERSION = '0.000103';
+our $VERSION = '0.000104';
 
 use Moo;
 

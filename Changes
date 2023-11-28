@@ -1,5 +1,7 @@
 Revision history for WWW-RoboCop
 
+{{$NEXT}}
+
 0.000103  2023-11-28 14:26:04Z
     - Check the image links too. (GH#6) (brian d foy)
 
